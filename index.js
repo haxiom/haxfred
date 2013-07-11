@@ -11,14 +11,15 @@ var client = new irc.Client(config.server, config.nick, {
 });
 
 
-client.addListener('pm', function (nick, text, message) {
-  client.say(nick, "thanks for thinking of me.");
+client.addListener('pm', function (from, message) {
+  client.say(from, "thanks for thinking of me.");
+  // console.log('%s' , [from, console.dir(message)]);
 });
 
 
-client.addListener('join', function(channel, nick, message) {
+client.addListener('join', function (channel, nick) {
   if (nick !== config.nick) {
-    client.say(nick + ": welcome to #haxiom");
+    client.say(channel, "Hey there, " + nick + " welcome to #haxiom!");
   }
 });
 
