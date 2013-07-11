@@ -2,7 +2,7 @@ var irc = require('irc');
 
 var config = {
   server: "irc.freenode.net",
-  nick: 'jeevesHaxiom',
+  nick: 'Haxfred',
   channels: ['#haxiom']
 };
 
