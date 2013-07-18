@@ -1,4 +1,5 @@
 var irc = require('irc');
+var _ = require('lodash');
 
 var config = {
   server: "irc.freenode.net",
@@ -10,10 +11,6 @@ var config = {
 /* ==========================================================================
    helpers
    ========================================================================== */
-function _rand (min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
 
 /**
  * Returns a random phrase
@@ -34,7 +31,7 @@ var randPhrase = function () {
     "Totally",
   ];
 
-  return phrases[_rand(0, phrases.length - 1)];
+  return phrases[_.random(0, phrases.length - 1)];
 }
 
 
