@@ -1,5 +1,6 @@
 var irc = require('irc');
 var _ = require('lodash');
+var util = require ('util');
 
 var config = {
   server: "irc.freenode.net",
@@ -70,11 +71,17 @@ client.addListener('pm', function (from, message) {
 
 
 client.addListener('join', function (channel, nick) {
+  util.log(nick + 'joined'); //
   if (nick !== config.nick) {
     client.say(channel, "Hey there, " + nick + " welcome to #haxiom!");
   }
 });
 
+client.addListener('part', function (channel, nick, reason, message){
+  if (nick === config.nick) {
+    util.log("bot was disconnected");
+  }
+});
 
 client.addListener('message' + config.channels[0], function (from, message){
   // might get a little word, but it's handy for seeing what messages actually crashed the bot
@@ -83,7 +90,6 @@ client.addListener('message' + config.channels[0], function (from, message){
 
   if (groups && groups[1] === config.nick) {
     console.log('matching group: %s', groups[1]);
-    // ends up in a PM pane
     client.say(config.channels[0], randPhrase());
   }
 });
