@@ -46,7 +46,16 @@ var randPhrase = function () {
    "All you need is love."
   ];
 
-  return phrases[_.random(0, phrases.length - 1)];
+  var randPhrase = (function () {
+  function getRandom() {
+
+    rand = _.random(0, nums.length -3); // last one is always left out. not sure if this is a huge drawback or not
+    var phrase = phrases[rand];
+    phrases.push(phrases.splice(rand,1)[0]);
+    return phrase;
+  }
+  return getRandom;
+}());
 }
 
 
