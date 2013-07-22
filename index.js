@@ -15,12 +15,11 @@ var config = {
 
 /**
  * Returns a random phrase
+ * An attempt has been made to prevent the same response being given twice in a row, but we will see how it pans out.
  * @return string
- * @todo make this a closure/object that keeps track of which responses are given,
  * @todo store responses in a JSON file/feed ?
- * making sure it doesn't give the same response in a row
  */
-var randPhrase = function () {
+var randPhrase = (function () {
   //@todo make these contextual? (as in, if there is a '?' at the end of a prompted message, dispatch 'answers to questions')
   // use a "hash": responses{ '?': ['yes, I think so', 'no way man'], '!' ["i'm excited too"] }
   var phrases = [
@@ -46,17 +45,14 @@ var randPhrase = function () {
    "All you need is love."
   ];
 
-  var randPhrase = (function () {
   function getRandom() {
-
-    rand = _.random(0, nums.length -3); // last one is always left out. not sure if this is a huge drawback or not
+    rand = _.random(0, phrases.length -3); // last one is always left out. not sure if this is a huge drawback or not
     var phrase = phrases[rand];
     phrases.push(phrases.splice(rand,1)[0]);
     return phrase;
   }
   return getRandom;
 }());
-}
 
 
 /* Regex
