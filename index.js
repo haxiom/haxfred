@@ -65,7 +65,15 @@ var personalChat = new RegExp('(^' + config.nick + ')(:.*)');
    ========================================================================== */
 
 var client = new irc.Client(config.server, config.nick, {
-    channels: config.channels
+    channels: config.channels,
+    autoConnect: false
+});
+
+client.connect(5, function() {
+   if (config.nick != client.nick) {
+      config.nick = client.nick;
+      personalChat = new RegExp('(^' + config.nick + ')(:.*)');
+   }
 });
 
 
