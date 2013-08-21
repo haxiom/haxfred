@@ -66,16 +66,19 @@ var personalChat = new RegExp('(^' + config.nick + ')(:.*)');
 
 var client = new irc.Client(config.server, config.nick, {
     channels: config.channels,
-    autoConnect: false
 });
 
-client.connect(5, function() {
+client.addListener('names', function (channel, nicks) {
+   // When Haxfred askes for the names on users
+   console.log('Nicks: ');
+   console.log(nicks);
    if (config.nick != client.nick) {
       config.nick = client.nick;
       personalChat = new RegExp('(^' + config.nick + ')(:.*)');
+      client.send('NICK', 'EvilHaxfred');
    }
+  // console.log('%s' , [from, console.dir(message)]);
 });
-
 
 client.addListener('pm', function (from, message) {
   client.say(from, "thanks for thinking of me.");
@@ -88,6 +91,7 @@ client.addListener('join', function (channel, nick) {
   if (nick !== config.nick) {
     client.say(channel, "Hey there, " + nick + " welcome to #haxiom!");
   }
+  client.send('names', '#haxiom');
 });
 
 client.addListener('part', function (channel, nick, reason, message){
