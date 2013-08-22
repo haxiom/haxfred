@@ -4,7 +4,8 @@ var util = require ('util');
 
 var config = {
   server: "irc.freenode.net",
-  nick: 'Haxfred',
+  nick: '',
+  nicks: ['Haxfred','EvilHaxfred','ClownHaxfred','SeansMinion','EmperorZurg'],
   channels: ['#haxiom']
 };
 
@@ -64,20 +65,29 @@ var personalChat = new RegExp('(^' + config.nick + ')(:.*)');
    Chat
    ========================================================================== */
 
-var client = new irc.Client(config.server, config.nick, {
+var client = new irc.Client(config.server, config.nicks[0], {
     channels: config.channels,
 });
 
 client.addListener('names', function (channel, nicks) {
    // When Haxfred askes for the names on users
-   console.log('Nicks: ');
-   console.log(nicks);
    if (config.nick != client.nick) {
-      config.nick = client.nick;
-      personalChat = new RegExp('(^' + config.nick + ')(:.*)');
-      client.send('NICK', 'EvilHaxfred');
+      for (var i = 0; i < config.nicks.length; i++) {
+         var found = false;
+         // Check to see if this Nick is already used
+         for (var key in nicks) {
+            if (config.nicks[i] == key) { found = true; }
+         }
+         // If not found, change Nick to that name
+         if (!found) {
+            config.nick = config.nicks[i];
+            personalChat = new RegExp('(^' + config.nick + ')(:.*)');
+            client.send('NICK', config.nicks[i]);
+            console.log("Switched Nick to "+config.nicks[i]);
+            break;
+         }
+      }
    }
-  // console.log('%s' , [from, console.dir(message)]);
 });
 
 client.addListener('pm', function (from, message) {
