@@ -65,19 +65,24 @@ var personalChat = new RegExp('(^' + config.nick + ')(:.*)');
    ========================================================================== */
 
 var client = new irc.Client(config.server, config.nick, {
-    channels: config.channels
+    channels: config.channels,
+    autoConnect: false,
+});
+
+// Connect and check your ACTUAL Nick
+client.connect(4,function () {
+   config.nick = client.nick;
 });
 
 
 client.addListener('pm', function (from, message) {
   client.say(from, "thanks for thinking of me.");
-  // console.log('%s' , [from, console.dir(message)]);
 });
 
 
 client.addListener('join', function (channel, nick) {
   util.log(nick + 'joined'); //
-  if (nick !== config.nick) {
+  if (nick !== client.nick) {
     client.say(channel, "Hey there, " + nick + " welcome to #haxiom!");
   }
 });
