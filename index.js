@@ -66,12 +66,14 @@ var personalChat = new RegExp('(^' + config.nick + ')(:.*)');
 
 var client = new irc.Client(config.server, config.nick, {
     channels: config.channels,
-    autoConnect: false,
+    autoConnect: false
 });
 
-// Connect and check your ACTUAL Nick
-client.connect(4,function () {
-   config.nick = client.nick;
+client.connect(5, function() {
+   if (config.nick != client.nick) {
+      config.nick = client.nick;
+      personalChat = new RegExp('(^' + config.nick + ')(:.*)');
+   }
 });
 
 
