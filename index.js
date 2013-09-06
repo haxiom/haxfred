@@ -59,7 +59,7 @@ var randPhrase = (function () {
 /* Regex
 =================================*/
 // is bot being addressed?
-var personalChat = new RegExp('(^' + config.nick + ')(:.*)');
+var personalChat = new RegExp('(^' + config.nicks[0] + ')(:.*)');
 
 /* ==========================================================================
    Chat
@@ -71,7 +71,7 @@ var client = new irc.Client(config.server, config.nicks[0], {
 
 client.addListener('names', function (channel, nicks) {
    // When Haxfred askes for the names on users
-   if (config.nick != client.nick) {
+   if (config.nicks[0] != client.nick) {
       for (var i = 0; i < config.nicks.length; i++) {
          var found = false;
          // Check to see if this Nick is already used
@@ -82,8 +82,8 @@ client.addListener('names', function (channel, nicks) {
          if (!found) {
             config.nick = config.nicks[i];
             personalChat = new RegExp('(^' + config.nick + ')(:.*)');
-            client.send('NICK', config.nicks[i]);
-            console.log("Switched Nick to "+config.nicks[i]);
+            client.send('NICK', config.nick);
+            console.log("Switched Nick to "+config.nick);
             break;
          }
       }
