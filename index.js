@@ -98,7 +98,7 @@ client.addListener('pm', function (from, message) {
 
 client.addListener('join', function (channel, nick) {
   util.log(nick + 'joined'); //
-  if (nick !== config.nick) {
+  if (nick !== client.nick) {
     client.say(channel, "Hey there, " + nick + " welcome to #haxiom!");
   }
   client.send('names', '#haxiom');
