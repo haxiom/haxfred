@@ -73,7 +73,9 @@ var getDate = function() {
 }
 
 var hasLink = function(message) {	
-	if(message.indexOf("http://") > -1 || message.indexOf("https://") > -1) {
+	if(message.indexOf("https://gist.github.com") > -1 || message.indexOf("http://gist.github.com") > -1 || message.indexOf("http://haxfred.hax10m.com") > -1) {
+		return false;
+	} else if(message.indexOf("http://") > -1 || message.indexOf("https://") > -1) {
 		return true;
 	} 
 	return false;
