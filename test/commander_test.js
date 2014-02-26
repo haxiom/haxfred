@@ -47,6 +47,17 @@ describe('Commander', function () {
         expect(called).to.be.true;
       });
 
+      it('returns output of command callback', function () {
+        var input = 'I really want some bar food. You know?';
+        var callbackOutput = 'A frosty beverage sounds nice.';
+
+        c.register('normal', 'bar', function () { return callbackOutput; });
+
+        output = c.route('normal', input);
+
+        expect(output).to.equal(callbackOutput);
+      });
+
       it('prefers routes with specific regexes to routes with .*', function () {
         var called = null;
         c.register('normal', function () {
@@ -62,13 +73,14 @@ describe('Commander', function () {
         var re = /I want some food/;
         var input = "I said to myself, I want some food. So I got some.";
         var called = false;
+        var output;
 
         c.register('normal', re, function () {});
         c.register('leave', re, function () {});
         c.register('pm', function () {});
-        c.register('pm', re, function () {called = true;});
+        c.register('pm', re, function () {called = true; return "Hello"});
 
-        c.route('pm', input);
+        output = c.route('pm', input);
 
         expect(called).to.be.true;
       });
