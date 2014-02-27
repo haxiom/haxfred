@@ -37,4 +37,8 @@ function getRandom() {
   return phrase;
 }
 
-module.exports = getRandom;
+module.exports = function (haxfred) {
+  haxfred.register('pm', function () {
+    return getRandom();
+  })
+}
