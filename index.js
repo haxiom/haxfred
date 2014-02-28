@@ -10,7 +10,7 @@ haxfred = new Haxfred(config);
 // populate haxfred router with commands
 descend()
   .wrap(haxfred.router)
-  .explore(commands);
+  .explore('commands');
 
 haxfred.connect();
 
