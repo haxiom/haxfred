@@ -35,6 +35,13 @@ describe('Commander', function () {
         }
       });
 
+      it('allows adding new contexts', function () {
+        var newContexts = ['fibby','bizzy'];
+
+        c.addContexts(newContexts);
+        expect(c.contexts).to.include.keys('fibby');
+      });
+
       it('invokes matching 1st matching route', function () {
         var called = null;
         c.register('normal', /food/, function () {called = true;});

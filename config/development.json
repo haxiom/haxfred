@@ -1,5 +1,5 @@
 {
   "server": "irc.freenode.net",
-  "nick:": "testHaxfred",
+  "nick": "testHaxfred",
   "channels": ["#testHaxiom"]
 }
