@@ -221,6 +221,12 @@ var client = new irc.Client(config.server, config.nick, {
     channels: config.channels
 });
 
+client.addListener('nick', function (oldnick, newnick, channels, message) {
+	if(oldnick == config.nick) {
+		config.nick = newnick;
+	}
+});
+
 
 client.addListener('pm', function (from, message) {
   client.say(from, "thanks for thinking of me.");
