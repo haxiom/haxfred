@@ -1,0 +1,113 @@
+body {
+	margin: 0;
+	color: #444444;
+	background: #fff1d3;
+	font-family: "Open Sans", sans-serif;
+}
+
+img, iframe, .article, .post-body, .postMessage, .when {
+	max-width: 100%;
+		text-overflow: ellipsis;
+		display: block;
+		margin: auto;
+		white-space: nowrap;
+		overflow: hidden;
+}
+
+a, a:visited, a:hover {
+	color: #906300;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+#wrapper {
+ background: #fff1d3;
+}
+
+.left-side, .right-side {
+	padding:20px;
+	box-sizing: border-box;
+}
+
+.left-side {
+	position: fixed;
+	top:0;
+	bottom:0;
+ 
+ width:30%;
+ background: #fff1d3;
+ text-align: center;
+}
+
+.left-side img {
+	border-radius: 15px;
+}
+
+.left-side h1, h3 {
+	margin: auto;
+}
+
+.right-side {
+	float:right;
+	width:70%;
+	background: #444444;
+	text-align: center;
+}
+
+#log {
+	background: white;
+	padding:20px;
+	border-radius: 15px;
+}
+
+.irc-link {
+	padding:20px;
+	box-sizing: border-box;
+	border-bottom:1px solid #cdcdcd;
+	text-overflow: ellipsis;
+			white-space: nowrap;
+	
+}
+
+.irc-link:last-child {
+	border-bottom: none;
+}
+
+.irc-link .author {
+	text-align: left;
+}
+
+a.article, a.article:visited {
+	font-size:1.3em;
+	background: #444444;
+	padding: 20px;
+	box-sizing: border-box;
+	color: white;
+	border-radius: 15px;
+}
+
+.footer {
+	clear:both;
+	background: #444444;
+	min-height: 100px;
+	color:white;
+	text-align: center;
+	line-height: 100px;
+	position: relative;
+}
+
+.footer a, .footer a:hover, .footer a:visited {
+	color:white;
+}
+
+@media screen and (max-width: 600px) {
+	.left-side, .right-side {
+		float:none;
+		width:100%;
+		position: static;
+	}
+	
+	.footer {
+	line-height: 2;	
+	}
+}
