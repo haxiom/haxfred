@@ -5,7 +5,8 @@ var fs = require('fs');
 
 var config = {
   server: "irc.freenode.net",
-  nick: 'Haxfred',
+  nick: '',
+  nicks: ['Haxfred','EvilHaxfred','ClownHaxfred','SeansMinion','EmperorZurg'],
   channels: ['#haxiom']
 };
 
@@ -211,16 +212,40 @@ var randPhrase = (function () {
 /* Regex
 =================================*/
 // is bot being addressed?
-var personalChat = new RegExp('(^' + config.nick + ')(:.*)');
+var personalChat = new RegExp('(^' + config.nicks[0] + ')(:.*)');
 
 /* ==========================================================================
    Chat
    ========================================================================== */
 
-var client = new irc.Client(config.server, config.nick, {
-    channels: config.channels
+var client = new irc.Client(config.server, config.nicks[0], {
+    channels: config.channels,
 });
 
+client.addListener('names', function (channel, nicks) {
+   // When Haxfred askes for the names on users
+   console.log("names");
+   console.log(config.nicks[0]);
+   if (config.nicks[0] != client.nick) {
+      for (var i = 0; i < config.nicks.length; i++) {
+         var found = false;
+         // Check to see if this Nick is already used
+         for (var key in nicks) {
+            if (config.nicks[i] == key) { found = true; }
+         }
+         // If not found, change Nick to that name
+         if (!found) {
+            config.nick = config.nicks[i];
+            personalChat = new RegExp('(^' + config.nick + ')(:.*)');
+            client.send('NICK', config.nick);
+            console.log("Switched Nick to "+config.nick);
+            break;
+         }
+      }
+   } else {
+      config.nick = config.nicks[0];
+   }
+});
 
 client.addListener('pm', function (from, message) {
   client.say(from, "thanks for thinking of me.");
@@ -230,9 +255,10 @@ client.addListener('pm', function (from, message) {
 
 client.addListener('join', function (channel, nick) {
   util.log(nick + 'joined'); //
-  if (nick !== config.nick) {
+  if (nick !== client.nick) {
     client.say(channel, "Hey there, " + nick + " welcome to #haxiom!");
   }
+  client.send('names', '#haxiom');
 });
 
 client.addListener('part', function (channel, nick, reason, message){
@@ -246,9 +272,13 @@ client.addListener('message' + config.channels[0], function (from, message){
   // might get a little word, but it's handy for seeing what messages actually crashed the bot
   console.log('from/to %s ', from, message);
   var groups = message.match(personalChat);
+  console.log('Groups:');
+  console.log(groups);
   if(hasLink(message)) { 
+    console.log('link');
     say = logThis(from, message);
   } else if (groups && groups[1] === config.nick) {
+    console.log('match');
     console.log('matching group: %s', groups[1]);
 		say = randPhrase();
   }
