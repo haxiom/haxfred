@@ -25,9 +25,9 @@ var config = {
 // Get what Haxfred last said
  
 var lastSaid = function(message) {
-	fs.readFile("./extras/lastsaid", 'utf8', function (err, data) {
+	fs.readFile(__dirname + "/extras/lastsaid", 'utf8', function (err, data) {
 		if (err) throw err;
-		fs.writeFile ("./extras/lastsaid", message, function(err) {
+		fs.writeFile (__dirname + "/extras/lastsaid", message, function(err) {
 			if (err) throw err;
 			
 		})
@@ -164,7 +164,7 @@ var logThis = function(from, message) {
 		printThis = "<div class='irc-link'><div class='post-body'>" + embedLink + "</div><div class='postMessage'>" + from + ": \"" + eMessage + "\"</div><div class='when'>Posted on " + getDate() + "</div></div>";
 	}
 	
-	prependData("./extras/loglinks", "./extras/loglinks", printThis);
+	prependData(__dirname + "/extras/loglinks", __dirname + "/extras/loglinks", printThis);
 	if(linkType == "YouTube" || linkType == "Vimeo") {
 		linkType = linkType + " video";	
 	}
