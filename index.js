@@ -9,6 +9,7 @@ var config = {
   nicks: ['Haxfred','EvilHaxfred','ClownHaxfred','SeansMinion','EmperorZurg'],
   channels: ['#haxiom']
 };
+config.nick = config.nicks[0];
 
 
 /* ==========================================================================
@@ -212,21 +213,21 @@ var randPhrase = (function () {
 /* Regex
 =================================*/
 // is bot being addressed?
-var personalChat = new RegExp('(^' + config.nicks[0] + ')(:.*)');
+var personalChat = new RegExp('(^' + config.nick + ')(:.*)');
 
 /* ==========================================================================
    Chat
    ========================================================================== */
 
-var client = new irc.Client(config.server, config.nicks[0], {
+var client = new irc.Client(config.server, config.nick, {
     channels: config.channels,
 });
 
 client.addListener('names', function (channel, nicks) {
    // When Haxfred askes for the names on users
    console.log("names");
-   console.log(config.nicks[0]);
-   if (config.nicks[0] != client.nick) {
+   console.log(config.nick);
+   if (config.nick != client.nick) {
       for (var i = 0; i < config.nicks.length; i++) {
          var found = false;
          // Check to see if this Nick is already used
@@ -242,14 +243,11 @@ client.addListener('names', function (channel, nicks) {
             break;
          }
       }
-   } else {
-      config.nick = config.nicks[0];
    }
 });
 
 client.addListener('pm', function (from, message) {
   client.say(from, "thanks for thinking of me.");
-  // console.log('%s' , [from, console.dir(message)]);
 });
 
 
