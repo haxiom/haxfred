@@ -1,0 +1,6 @@
+{
+  server: "irc.freenode.net",
+  nick: '',
+  nicks: ['Haxfred','EvilHaxfred','ClownHaxfred','SeansMinion','EmperorZurg'],
+  channels: ['#haxiom']
+}
