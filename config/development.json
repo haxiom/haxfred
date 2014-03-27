@@ -1,6 +1,19 @@
 {
-  server: "irc.freenode.net",
-  nick: '',
-  nicks: ['Haxfred','EvilHaxfred','ClownHaxfred','SeansMinion','EmperorZurg'],
-  channels: ['#haxiom']
+  "server": "irc.freenode.net",
+  "nick": "",
+  "nicks": [
+     "Haxfred",
+     "EvilHaxfred",
+     "ClownHaxfred",
+     "SeansMinion",
+     "EmperorZurg"
+  ],
+  "channels": ["#haxiom"],
+  "adapters": [
+     "../Adapter",
+     "./connectors/haxfred-irc.js"
+  ],
+  "components": [
+     "../Component"
+  ]
 }
