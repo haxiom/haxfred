@@ -10,10 +10,11 @@
   ],
   "channels": ["#haxiom"],
   "adapters": [
-     "../Adapter",
-     "./connectors/haxfred-irc.js"
+     "../Adapter"
   ],
   "components": [
-     "../Component"
+     "../Component",
+     "../Component2",
+     "../Component3"
   ]
 }
