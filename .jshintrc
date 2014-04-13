@@ -18,7 +18,7 @@
     "it": true,
     "runs": true,
     "waits": true,
-    "waitsFor": true,
+    "waitsFor": true
   },
   "immed": true,
   "newcap": true,
