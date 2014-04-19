@@ -20,6 +20,7 @@
   "main": "index.js",
   "scripts": {
     "start": "supervisor index.js",
-    "test": "mocha -w test --reporter spec"
+    "test": "mocha test",
+    "development": "mocha -w test --reporter spec"
   }
 }
