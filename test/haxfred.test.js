@@ -1,7 +1,20 @@
-var expect = require('chai').expect;
+/* jshint and chai's expect interface do not place nicely
+ * so we ignore jshint in our tests :\
+ */
+/* jshint -W024, expr:true */
+
+// TODO: put these in a common file to reduce boilerplate
+// ala https://github.com/domenic/sinon-chai/blob/master/test/common.js
+
 var sinon = require('sinon');
+var sinonChai = require('sinon-chai');
+var expect = require('chai').expect;
 var Haxfred = require('../lib/haxfred');
 var path = require('path');
+var chai = require('chai');
+
+chai.use(expect);
+chai.use(sinonChai);
 
 describe('Haxfred', function () {
   describe('creation', function () {
@@ -31,9 +44,6 @@ describe('Haxfred', function () {
       });
     });
     describe('initialization', function () {
-//       describe('getRoot', function (){
-//
-//       })
       it('adds Components', function () {
         var stub = sinon.stub(Haxfred.prototype, '_addModule');
 
@@ -44,8 +54,7 @@ describe('Haxfred', function () {
           ]
         }).initialize();
 
-        expect(stub.calledTwice).to.be.true;
-
+        expect(stub).have.been.calledTwice;
         stub.restore();
       });
 
@@ -60,7 +69,7 @@ describe('Haxfred', function () {
           ]
         }).initialize();
 
-        expect(stub.calledThrice).to.betrue;
+        expect(stub).to.have.been.calledThrice;
         stub.restore();
       });
 
@@ -68,7 +77,8 @@ describe('Haxfred', function () {
         var haxfred = new Haxfred({
           adapters: [
             '../test/fixtures/noop-adapter'
-          ]
+          ],
+          rootDir: path.resolve(__dirname, 'fixtures')
         });
 
         haxfred.initialize();
@@ -117,14 +127,46 @@ describe('Haxfred', function () {
       });
 
       it('throws an error if module cannot be found', function () {
-        var haxfred = new Haxfred({
-          adapters: [
+        var haxfred = new Haxfred({ adapters: [
             './foo/bar/baz'
           ]
         });
 
         expect(haxfred.initialize)
         .to.throw(Error);
+      });
+    });
+
+    describe('components and modules', function () {
+      it('passes an instance of itself to components', function () {
+        var spyModule = sinon.spy();
+        var haxfred = new Haxfred();
+
+        haxfred.components.push(spyModule);
+        haxfred.registerModules();
+
+        expect(spyModule).to.have.been.calledWith(haxfred);
+      });
+
+      it('does not register modules that are not functions', function () {
+        var haxfred = new Haxfred();
+
+        expect(function(){
+          haxfred._registerModule({'name': 'stringExport'});
+        }).to.throw(Error);
+      });
+    });
+
+    describe('events', function () {
+      it('on: accepts a string, an optional "filter", and a handler function' , function () {
+        var haxfred = new Haxfred();
+
+        haxfred.on('foo', /puppies/, function(){
+          console.log('baz');
+        });
+
+        expect(haxfred._events[0]).to.have.property('foo');
+        expect(haxfred._events[0]).to.have.property('filter');
       });
     });
 });
