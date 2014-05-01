@@ -157,16 +157,30 @@ describe('Haxfred', function () {
       });
     });
 
-    describe('events', function () {
-      it('on: accepts a string, an optional "filter", and a handler function' , function () {
-        var haxfred = new Haxfred();
+    describe('on', function () {
+      var haxfred;
 
+      beforeEach(function() {
+        haxfred = new Haxfred();
+      });
+
+      it('accepts a string, an optional "filter", and a handler function' , function () {
         haxfred.on('foo', /puppies/, function(){
           console.log('baz');
         });
 
-        expect(haxfred._events[0]).to.have.property('foo');
-        expect(haxfred._events[0]).to.have.property('filter');
+        expect(haxfred._events).to.have.property('foo');
+        expect(haxfred._events['foo'][0].filter).to.be.an.instanceOf(RegExp);
+        expect(haxfred._events['foo'][0].callback).to.be.an.instanceOf(Function);
+      });
+
+      it('properly registers components that do not specify a filter', function() {
+         haxfred.on('foo',function() {
+           true;
+         });
+
+         expect(haxfred._events['foo'][0].filter).to.be.null;
+         expect(haxfred._events['foo'][0].callback).to.be.an.instanceOf(Function);
       });
     });
 });
