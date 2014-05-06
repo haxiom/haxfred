@@ -12,6 +12,7 @@ var expect = require('chai').expect;
 var Haxfred = require('../lib/haxfred');
 var path = require('path');
 var chai = require('chai');
+var Q = require('q');
 
 chai.use(expect);
 chai.use(sinonChai);
@@ -182,5 +183,29 @@ describe('Haxfred', function () {
          expect(haxfred._events['foo'][0].filter).to.be.null;
          expect(haxfred._events['foo'][0].callback).to.be.an.instanceOf(Function);
       });
+    });
+
+    describe('emit', function() {
+       var haxfred;
+
+       beforeEach(function() {
+          haxfred = new Haxfred();
+       });
+
+       it('accepts a string, a data object', function() {
+          var spy = sinon.spy();
+
+          haxfred._events['foo'] = [];
+          haxfred._events['foo'][0] = {
+             callback: spy,
+             filter: function() {return true}
+          };
+
+          var data = { baz: 'shit' };
+
+          haxfred.emit('foo', data);
+
+          expect(spy).to.have.been.calledWith(data, Q());
+       });
     });
 });
