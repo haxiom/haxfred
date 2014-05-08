@@ -192,20 +192,184 @@ describe('Haxfred', function () {
           haxfred = new Haxfred();
        });
 
-       it('accepts a string, a data object', function() {
-          var spy = sinon.spy();
+       it('calls onComplete with the data object', function(done){
+          haxfred._events['foo'] = [];
+          haxfred._events['foo'][0] = {
+             callback: function(data, deferred) {
+               deferred.resolve();
+             },
+             filter: null
+          }
+
+          var data = {
+            thing: 'baz'
+          };
+
+          data.onComplete = sinon.spy(function() {
+            expect(data.onComplete).to.be.called;
+            done();
+          });
+
+
+          haxfred.emit('foo', data);
+       });
+
+       it('accepts a string, a data object', function(done) {
+          var deferringFunction = sinon.spy(function(data,deferred) {
+             deferred.resolve();
+          });
+
+          var data = {
+             baz: 'shit',
+             onComplete: function() {
+                expect(deferringFunction.args[0][0]).to.equal(data);
+                expect(deferringFunction.args[0][1]).to.have.property('resolve');
+                done();
+             }
+          };
 
           haxfred._events['foo'] = [];
           haxfred._events['foo'][0] = {
-             callback: spy,
+             callback: deferringFunction,
              filter: function() {return true}
           };
 
-          var data = { baz: 'shit' };
-
           haxfred.emit('foo', data);
 
-          expect(spy).to.have.been.calledWith(data, Q());
+       });
+
+       it('calls all listeners for that event', function(done) {
+
+          var deferringFunction = sinon.spy(function(data,deferred) {
+             deferred.resolve();
+          });
+          var deferringFunction2= sinon.spy(function(data,deferred) {
+             deferred.resolve();
+          });
+
+          haxfred._events['foo'] = [];
+          haxfred._events['foo'][0] = {
+             callback: deferringFunction,
+             filter: function() {return true}
+          };
+          haxfred._events['foo'][1] = {
+             callback: deferringFunction2,
+             filter: function() {return true}
+          };
+
+          haxfred.emit('foo', {
+             onComplete: function() {
+                expect(deferringFunction).to.be.calledOnce;
+                expect(deferringFunction2).to.be.calledAfter(deferringFunction);
+                done();
+             }
+          });
+       });
+
+       it('calls are filtered with a String', function(done) {
+          // Create spy that auto resolves defers
+          var deferringFunction = sinon.spy(function(data,deferred) {
+             deferred.resolve();
+          });
+
+          haxfred._events['foo'] = [];
+          // First listener that should match the content
+          haxfred._events['foo'][0] = {
+             callback: deferringFunction,
+             filter: 'bunnies'
+          };
+          // Second listener that shouldnt be called
+          haxfred._events['foo'][1] = {
+             callback: deferringFunction,
+             filter: 'birdies'
+          };
+
+          haxfred.emit('foo', {
+             content: 'bunnies',
+             bar: 'baz',
+             onComplete: function() {
+                expect(deferringFunction).to.be.calledOnce;
+                done();
+             }
+          });
+       });
+
+       it('calls are filtered with a Regex', function(done) {
+          // Create spy that auto resolves defers
+          var deferringFunction = sinon.spy(function(data,deferred) {
+             deferred.resolve();
+          });
+
+          haxfred._events['foo'] = [];
+
+          // First listener that should match the content
+          haxfred._events['foo'][0] = {
+             callback: deferringFunction,
+             filter: /bunnies/
+          };
+
+          // Second listener that shouldn't be called
+          haxfred._events['foo'][1] = {
+             callback: deferringFunction,
+             filter: /birdies/
+          };
+
+          haxfred.emit('foo', {
+             content: 'bunnies',
+             bar: 'baz',
+             onComplete: function() {
+                expect(deferringFunction).to.be.calledOnce;
+                done();
+             }
+          });
+       });
+
+       it('calls are filtered with a Function', function(done) {
+          // Create spy that auto resolves defers
+          var deferringFunction = sinon.spy(function(data,deferred) {
+             deferred.resolve();
+          });
+
+          // Spy for checking that the filter function receives its arguments
+          var filterSpy = sinon.spy(function(data) {
+             return false;
+          });
+          haxfred._events['foo'] = [];
+
+          // First listener for checking the arguments
+          haxfred._events['foo'][0] = {
+             callback: deferringFunction,
+             filter: filterSpy
+          };
+
+          // Second listener that shouldn't be called
+          haxfred._events['foo'][1] = {
+             callback: deferringFunction,
+             filter: function() {
+                return false;
+             }
+          };
+
+          // Third 'truthy' filtered listener that should be called
+          haxfred._events['foo'][1] = {
+             callback: deferringFunction,
+             filter: function() {
+                return 'things';
+             }
+          };
+
+          var data = {
+             content: 'bunnies',
+             bar: 'baz',
+             onComplete: function() {
+                expect(filterSpy).to.be.calledOnce;
+                expect(filterSpy).to.be.calledWith(data);
+                expect(deferringFunction).to.be.calledOnce;
+                done();
+             }
+          };
+
+          haxfred.emit('foo', data);
        });
     });
 });
