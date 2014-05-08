@@ -1,25 +1,42 @@
 {
   "name": "Haxfred",
   "version": "1.0.0",
+  "author": "Haxiom",
   "description": "Your friendly Neighborhood #haxiom bot",
+  "contributors": [
+    {
+      "name": "Nick Tomlin",
+      "web": "http://nick-tomlin.com/"
+    },
+    {
+      "name": "Sean Zelmer",
+      "web": "http://lejeunerenard.com/"
+    },
+    {
+      "name": "Blade Barringer",
+      "web": "http://bladebarringer.com/"
+    }
+  ],
   "dependencies": {
     "irc": "~0.3.6",
     "lodash": "~1.3.1",
     "q": "~1.0.0",
     "nconf": "~0.6.9",
     "node-uuid": "~1.4.1",
-    "sinon": "^1.9.1"
+    "sinon": "^1.9.1",
+    "sinon-chai": "^2.5.0"
   },
   "devDependencies": {
-    "mocha": "~1.17.1",
-    "sinon": "~1.8.2",
-    "chai": "~1.9.0"
+    "chai": "~1.9.0",
+    "mocha": "^1.18.2",
+    "sinon": "~1.8.2"
   },
   "bundleDependencies": [],
   "private": true,
   "main": "index.js",
   "scripts": {
     "start": "supervisor index.js",
-    "test": "mocha -w test --reporter spec"
+    "test": "mocha test",
+    "development": "mocha -w test --reporter spec"
   }
 }
