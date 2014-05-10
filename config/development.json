@@ -1,6 +1,5 @@
 {
   "server": "irc.freenode.net",
-  "nick": "",
   "nicks": [
      "Haxfred",
      "EvilHaxfred",
@@ -10,11 +9,8 @@
   ],
   "channels": ["#haxiom"],
   "adapters": [
-     "../Adapter"
+     "haxfred-irc"
   ],
   "components": [
-     "../Component",
-     "../Component2",
-     "../Component3"
   ]
 }
