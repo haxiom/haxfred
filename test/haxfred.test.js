@@ -82,7 +82,7 @@ describe('Haxfred', function () {
           rootDir: path.resolve(__dirname, 'fixtures')
         });
 
-        haxfred.initialize();
+        haxfred.loadAdapters(haxfred.config.adapters);
 
         expect(haxfred.adapters.length).to.equal(1);
       });
@@ -95,7 +95,7 @@ describe('Haxfred', function () {
           rootDir: path.resolve(__dirname, 'fixtures')
         });
 
-        haxfred.initialize();
+        haxfred.loadAdapters(haxfred.config.adapters);
 
         expect(haxfred.adapters.length).to.equal(1);
       });
@@ -109,7 +109,7 @@ describe('Haxfred', function () {
           rootDir: path.resolve(__dirname, 'fixtures')
         });
 
-        haxfred.initialize();
+        haxfred.loadAdapters(haxfred.config.adapters);
 
         expect(haxfred.adapters.length).to.equal(2);
       });
@@ -122,7 +122,7 @@ describe('Haxfred', function () {
           rootDir: path.resolve(__dirname, 'fixtures')
         });
 
-        haxfred.initialize();
+        haxfred.loadAdapters(haxfred.config.adapters);
 
         expect(haxfred.adapters.length).to.equal(1);
       });
