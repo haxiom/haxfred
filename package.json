@@ -1,20 +1,22 @@
 {
-  "name": "Haxfred",
+  "name": "haxfred",
   "version": "1.0.0",
-  "author": "Haxiom",
+  "author": {
+    "name": "Haxiom"
+  },
   "description": "Your friendly Neighborhood #haxiom bot",
   "contributors": [
     {
       "name": "Nick Tomlin",
-      "web": "http://nick-tomlin.com/"
+      "url": "http://nick-tomlin.com/"
     },
     {
       "name": "Sean Zelmer",
-      "web": "http://lejeunerenard.com/"
+      "url": "http://lejeunerenard.com/"
     },
     {
       "name": "Blade Barringer",
-      "web": "http://bladebarringer.com/"
+      "url": "http://bladebarringer.com/"
     }
   ],
   "dependencies": {
@@ -33,7 +35,7 @@
   },
   "bundleDependencies": [],
   "private": true,
-  "main": "index.js",
+  "main": "lib/haxfred.js",
   "scripts": {
     "start": "supervisor index.js",
     "test": "mocha test",
