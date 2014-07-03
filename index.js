@@ -70,7 +70,7 @@ var getDate = function() {
 	if (minute < 10) {
 		minute = "0" + minute;
 	}
-	var output = day + "/" + month + "/" + year + " at " + hour + ":" + minute + ampm;
+	var output = month + "/" + day + "/" + year + " at " + hour + ":" + minute + ampm;
   return output;  
 }
 
