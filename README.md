@@ -1,4 +1,4 @@
-ircbot
+Haxfred
 ======
 
 Your friendly neighborhood #haxiom bot.
