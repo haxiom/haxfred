@@ -1,3 +1,3 @@
 module.exports = function (haxfred) {
-  void haxfred;
-};
+  void haxfred
+}

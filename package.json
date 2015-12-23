@@ -28,13 +28,29 @@
   "devDependencies": {
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
-    "sinon": "^1.17.2"
+    "sinon": "^1.17.2",
+    "snazzy": "^2.0.1",
+    "standard": "^5.4.1"
   },
   "private": true,
   "main": "lib/haxfred.js",
   "scripts": {
     "start": "node index.js",
-    "test": "mocha test",
-    "development": "mocha -w test --reporter spec"
+    "development": "mocha -w test --reporter spec",
+    "test": "npm run lint && mocha",
+    "lint": "standard --verbose | snazzy"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it",
+      "expect",
+      "sandbox"
+    ]
   }
 }
