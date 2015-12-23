@@ -39,7 +39,7 @@
   "main": "lib/haxfred.js",
   "scripts": {
     "start": "node index.js",
-    "development": "mocha -w test --reporter spec",
+    "development": "mocha -w test",
     "test": "npm run lint && mocha",
     "lint": "standard --verbose | snazzy"
   },
