@@ -36,7 +36,7 @@
   "private": true,
   "main": "lib/haxfred.js",
   "scripts": {
-    "start": "supervisor index.js",
+    "start": "node index.js",
     "test": "mocha test",
     "development": "mocha -w test --reporter spec"
   }
