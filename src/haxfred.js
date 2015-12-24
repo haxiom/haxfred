@@ -109,8 +109,8 @@ class Haxfred {
     }
 
     this._events[event].push({
-      callback: callback,
-      filter: filter
+      callback,
+      filter
     })
   }
 
