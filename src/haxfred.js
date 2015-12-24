@@ -8,7 +8,7 @@ import path from 'path'
  *
  */
 class Haxfred {
-  constructor(config) {
+  constructor (config) {
     this._events = {}
     this.adapters = []
     this.components = []
