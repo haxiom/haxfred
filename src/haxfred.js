@@ -34,7 +34,7 @@ class Haxfred {
     return this
   }
 
-  // we might be bale to get away
+  // we might be able to get away
   // with merging loadComponents
   // and loadAdapters into one function
   // but we'll leave them for now
