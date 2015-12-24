@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { each, extend } from 'lodash'
 import Q from 'q'
 import path from 'path'
 
@@ -11,7 +11,7 @@ let Haxfred = function (config) {
   this._events = {}
   this.adapters = []
   this.components = []
-  this.config = _.extend({
+  this.config = extend({
     adapters: [],
     components: [],
     rootDir: __dirname
@@ -40,7 +40,7 @@ Haxfred.prototype.initialize = function () {
 // in case we want to add some
 // setup that is particular to each type
 Haxfred.prototype.loadComponents = function (components) {
-  _.each(components, function (component) {
+  each(components, function (component) {
     this._addModule('components', component)
   }.bind(this))
 
@@ -48,7 +48,7 @@ Haxfred.prototype.loadComponents = function (components) {
 }
 
 Haxfred.prototype.loadAdapters = function (adapters) {
-  _.each(adapters, function (adapter) {
+  each(adapters, function (adapter) {
     this._addModule('adapters', adapter)
   }.bind(this))
 
