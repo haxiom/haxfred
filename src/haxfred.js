@@ -1,13 +1,13 @@
-var _ = require('lodash')
-var Q = require('q')
-var path = require('path')
+import _ from 'lodash'
+import Q from 'q'
+import path from 'path'
 
 /**
  * Create a new Haxfred instance
  * config {object} configuration properties  to be copied onto instance.
  *
  */
-var Haxfred = function (config) {
+let Haxfred = function (config) {
   this._events = {}
   this.adapters = []
   this.components = []
@@ -58,7 +58,7 @@ Haxfred.prototype.loadAdapters = function (adapters) {
 // 'nodeModule'
 // './adapters/foo'
 Haxfred.prototype._addModule = function (moduleType, modulePath) {
-  var resolvedPath
+  let resolvedPath
 
   // attempt to load as a node_module
   // otherwise, catch the error that require generates
@@ -80,7 +80,7 @@ Haxfred.prototype._addModule = function (moduleType, modulePath) {
 // instead of requiring the module and passing haxfred
 // to it right away. It's clearer and more testable.
 Haxfred.prototype.registerModules = function () {
-  var allModules = this.adapters.concat(this.components)
+  let allModules = this.adapters.concat(this.components)
 
   allModules.forEach(function (module) {
     this._registerModule(module)
@@ -114,12 +114,12 @@ Haxfred.prototype.on = function (event, filter, callback) {
 }
 
 Haxfred.prototype.emit = function (event, data) {
-  var matchingListeners = []
+  let matchingListeners = []
 
   // Loop through listeners
   this._events[event] = this._events[event] || []
   this._events[event].forEach(function (listener) {
-    var match
+    let match
     if (!listener.filter) {
       matchingListeners.push(listener.callback)
       return
@@ -146,7 +146,7 @@ Haxfred.prototype.emit = function (event, data) {
 
   matchingListeners.reduce(function (prev, next) {
     return prev.then(function () {
-      var deferred = Q.defer()
+      let deferred = Q.defer()
       next(data, deferred)
       return deferred.promise.then()
     })
