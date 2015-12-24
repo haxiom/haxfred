@@ -23,7 +23,7 @@
     "lodash": "^3.10.1",
     "nconf": "~0.6.9",
     "node-uuid": "~1.4.1",
-    "q": "~1.0.0"
+    "q": "^1.4.1"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
