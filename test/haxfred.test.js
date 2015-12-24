@@ -1,8 +1,3 @@
-/* jshint and chai's expect interface do not place nicely
- * so we ignore jshint in our tests :\
- */
-/* jshint -W024, expr:true */
-
 // TODO: put these in a common file to reduce boilerplate
 // ala https://github.com/domenic/sinon-chai/blob/master/test/common.js
 
