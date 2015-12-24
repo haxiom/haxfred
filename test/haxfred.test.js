@@ -9,7 +9,7 @@
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
 import { expect } from 'chai'
-import Haxfred from '../lib/haxfred'
+import Haxfred from '../src/haxfred'
 import path from 'path'
 import chai from 'chai'
 
