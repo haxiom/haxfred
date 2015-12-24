@@ -39,9 +39,11 @@
   "main": "lib/haxfred.js",
   "scripts": {
     "start": "node index.js",
-    "development": "mocha -w test",
+    "build": "babel src --out-dir lib",
+    "prepublish": "npm test && npm run build",
+    "lint": "standard --verbose | snazzy",
     "test": "npm run lint && mocha",
-    "lint": "standard --verbose | snazzy"
+    "development": "mocha -w test"
   },
   "standard": {
     "globals": [
