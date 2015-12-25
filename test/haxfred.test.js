@@ -13,17 +13,17 @@ chai.use(sinonChai)
 
 describe('Haxfred', function () {
   describe('creation', function () {
-    it('creates an event property ', function () {
-      let haxfred = new Haxfred()
+    beforeEach(function () {
+      this.haxfred = new Haxfred()
+    })
 
-      expect(haxfred).to.have.property('_events')
+    it('creates an event property ', function () {
+      expect(this.haxfred).to.have.property('_events')
     })
 
     it('creates adapters and components properties', function () {
-      let haxfred = new Haxfred()
-
-      expect(haxfred.config.adapters).to.be.an('array')
-      expect(haxfred.config.components).to.be.an('array')
+      expect(this.haxfred.config.adapters).to.be.an('array')
+      expect(this.haxfred.config.components).to.be.an('array')
     })
 
     it('add configuration options to instance', function () {
@@ -133,64 +133,61 @@ describe('Haxfred', function () {
   })
 
   describe('components and modules', function () {
+    beforeEach(function () {
+      this.haxfred = new Haxfred()
+    })
+
     it('passes an instance of itself to components', function () {
       let spyModule = sinon.spy()
-      let haxfred = new Haxfred()
 
-      haxfred.components.push(spyModule)
-      haxfred.registerModules()
+      this.haxfred.components.push(spyModule)
+      this.haxfred.registerModules()
 
-      expect(spyModule).to.have.been.calledWith(haxfred)
+      expect(spyModule).to.have.been.calledWith(this.haxfred)
     })
 
     it('does not register modules that are not functions', function () {
-      let haxfred = new Haxfred()
-
-      haxfred.components.push({ 'name': 'stringExport' })
+      this.haxfred.components.push({ 'name': 'stringExport' })
 
       expect(() => {
-        haxfred.registerModules()
+        this.haxfred.registerModules()
       }).to.throw(Error)
     })
   })
 
   describe('on', function () {
-    let haxfred
-
     beforeEach(function () {
-      haxfred = new Haxfred()
+      this.haxfred = new Haxfred()
     })
 
     it('accepts a string, an optional "filter", and a handler function', function () {
-      haxfred.on('foo', /puppies/, function () {
+      this.haxfred.on('foo', /puppies/, function () {
         console.log('baz')
       })
 
-      expect(haxfred._events).to.have.property('foo')
-      expect(haxfred._events['foo'][0].filter).to.be.an.instanceOf(RegExp)
-      expect(haxfred._events['foo'][0].callback).to.be.an.instanceOf(Function)
+      expect(this.haxfred._events).to.have.property('foo')
+      expect(this.haxfred._events['foo'][0].filter).to.be.an.instanceOf(RegExp)
+      expect(this.haxfred._events['foo'][0].callback).to.be.an.instanceOf(Function)
     })
 
     it('properly registers components that do not specify a filter', function () {
-      haxfred.on('foo', function () {
+      this.haxfred.on('foo', function () {
         true
       })
 
-      expect(haxfred._events['foo'][0].filter).to.be.null
-      expect(haxfred._events['foo'][0].callback).to.be.an.instanceOf(Function)
+      expect(this.haxfred._events['foo'][0].filter).to.be.null
+      expect(this.haxfred._events['foo'][0].callback).to.be.an.instanceOf(Function)
     })
   })
 
   describe('emit', function () {
-    let haxfred
-
     beforeEach(function () {
-      haxfred = new Haxfred()
+      this.haxfred = new Haxfred()
     })
 
     it('calls onComplete with the data object', function (done) {
-      haxfred._events['foo'] = []
-      haxfred._events['foo'][0] = {
+      this.haxfred._events['foo'] = []
+      this.haxfred._events['foo'][0] = {
         callback: function (data, deferred) {
           deferred.resolve()
         },
@@ -206,7 +203,7 @@ describe('Haxfred', function () {
         done()
       })
 
-      haxfred.emit('foo', data)
+      this.haxfred.emit('foo', data)
     })
 
     it('accepts a string, a data object', function (done) {
@@ -223,13 +220,13 @@ describe('Haxfred', function () {
         }
       }
 
-      haxfred._events['foo'] = []
-      haxfred._events['foo'][0] = {
+      this.haxfred._events['foo'] = []
+      this.haxfred._events['foo'][0] = {
         callback: deferringFunction,
         filter: function () { return true }
       }
 
-      haxfred.emit('foo', data)
+      this.haxfred.emit('foo', data)
     })
 
     it('calls all listeners for that event', function (done) {
@@ -240,17 +237,17 @@ describe('Haxfred', function () {
         deferred.resolve()
       })
 
-      haxfred._events['foo'] = []
-      haxfred._events['foo'][0] = {
+      this.haxfred._events['foo'] = []
+      this.haxfred._events['foo'][0] = {
         callback: deferringFunction,
         filter: function () { return true }
       }
-      haxfred._events['foo'][1] = {
+      this.haxfred._events['foo'][1] = {
         callback: deferringFunction2,
         filter: function () { return true }
       }
 
-      haxfred.emit('foo', {
+      this.haxfred.emit('foo', {
         onComplete: function () {
           expect(deferringFunction).to.be.calledOnce
           expect(deferringFunction2).to.be.calledAfter(deferringFunction)
@@ -265,19 +262,19 @@ describe('Haxfred', function () {
         deferred.resolve()
       })
 
-      haxfred._events['foo'] = []
+      this.haxfred._events['foo'] = []
       // First listener that should match the content
-      haxfred._events['foo'][0] = {
+      this.haxfred._events['foo'][0] = {
         callback: deferringFunction,
         filter: 'bunnies'
       }
       // Second listener that shouldnt be called
-      haxfred._events['foo'][1] = {
+      this.haxfred._events['foo'][1] = {
         callback: deferringFunction,
         filter: 'birdies'
       }
 
-      haxfred.emit('foo', {
+      this.haxfred.emit('foo', {
         content: 'bunnies',
         bar: 'baz',
         onComplete: function () {
@@ -293,21 +290,21 @@ describe('Haxfred', function () {
         deferred.resolve()
       })
 
-      haxfred._events['foo'] = []
+      this.haxfred._events['foo'] = []
 
       // First listener that should match the content
-      haxfred._events['foo'][0] = {
+      this.haxfred._events['foo'][0] = {
         callback: deferringFunction,
         filter: /bunnies/
       }
 
       // Second listener that shouldn't be called
-      haxfred._events['foo'][1] = {
+      this.haxfred._events['foo'][1] = {
         callback: deferringFunction,
         filter: /birdies/
       }
 
-      haxfred.emit('foo', {
+      this.haxfred.emit('foo', {
         content: 'bunnies',
         bar: 'baz',
         onComplete: function () {
@@ -327,16 +324,16 @@ describe('Haxfred', function () {
       let filterSpy = sinon.spy(function (data) {
         return false
       })
-      haxfred._events['foo'] = []
+      this.haxfred._events['foo'] = []
 
       // First listener for checking the arguments
-      haxfred._events['foo'][0] = {
+      this.haxfred._events['foo'][0] = {
         callback: deferringFunction,
         filter: filterSpy
       }
 
       // Second listener that shouldn't be called
-      haxfred._events['foo'][1] = {
+      this.haxfred._events['foo'][1] = {
         callback: deferringFunction,
         filter: function () {
           return false
@@ -344,7 +341,7 @@ describe('Haxfred', function () {
       }
 
       // Third 'truthy' filtered listener that should be called
-      haxfred._events['foo'][1] = {
+      this.haxfred._events['foo'][1] = {
         callback: deferringFunction,
         filter: function () {
           return 'things'
@@ -362,7 +359,7 @@ describe('Haxfred', function () {
         }
       }
 
-      haxfred.emit('foo', data)
+      this.haxfred.emit('foo', data)
     })
   })
 })
