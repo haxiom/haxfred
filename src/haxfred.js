@@ -1,4 +1,4 @@
-import { each, extend } from 'lodash'
+import { each, extend, get, includes } from 'lodash'
 import Q from 'q'
 import path from 'path'
 
@@ -95,7 +95,35 @@ class Haxfred {
       throw new Error('You have attempted to use a module that does not export a function')
     }
 
+    if (module.requires) this._checkRequiredModules(module.requires)
+
     module(this)
+  }
+
+  _checkRequiredModules (requires) {
+    let { adapters = [], components = [], config = [] } = requires
+
+    adapters.forEach(function (adapterName) {
+      this._checkModuleExists('adapter', adapterName)
+    }.bind(this))
+
+    components.forEach(function (componentName) {
+      this._checkModuleExists('component', componentName)
+    }.bind(this))
+
+    config.forEach(function (configPath) {
+      let hasRequiredConfig = get(this.config, configPath)
+
+      if (!hasRequiredConfig) throw new Error(`A module requires the config "${configPath}", but it was not found`)
+    }.bind(this))
+  }
+
+  _checkModuleExists (type, moduleName) {
+    let config = this.config[`${type}s`]
+
+    if (!includes(config, moduleName)) {
+      throw new Error(`A module requires the ${type} "${moduleName}", but it was not found`)
+    }
   }
 
   on (event, filter, callback) {

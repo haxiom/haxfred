@@ -151,7 +151,115 @@ describe('Haxfred', function () {
 
       expect(() => {
         this.haxfred.registerModules()
-      }).to.throw(Error)
+      }).to.throw('You have attempted to use a module that does not export a function')
+    })
+
+    it('does not register component if haxfred does not have required adapter', function () {
+      let component = sinon.spy()
+      component.requires = {
+        adapters: ['foo']
+      }
+
+      this.haxfred.components.push(component)
+
+      expect(() => {
+        this.haxfred.registerModules()
+      }).to.throw('A module requires the adapter "foo", but it was not found')
+    })
+
+    it('registers component if haxfred does have required adapter in config', function () {
+      let component = sinon.spy()
+      component.requires = {
+        adapters: ['foo']
+      }
+
+      this.haxfred.config.adapters.push('foo')
+      this.haxfred.components.push(component)
+
+      this.haxfred.registerModules()
+
+      expect(component).to.be.calledWith(this.haxfred)
+    })
+
+    it('does not register component if haxfred does not have required component', function () {
+      let component = sinon.spy()
+      component.requires = {
+        components: ['foo']
+      }
+
+      this.haxfred.components.push(component)
+
+      expect(() => {
+        this.haxfred.registerModules()
+      }).to.throw('A module requires the component "foo", but it was not found')
+    })
+
+    it('registers component if haxfred does have required adapter in config', function () {
+      let component = sinon.spy()
+      component.requires = {
+        components: ['foo']
+      }
+
+      this.haxfred.config.components.push('foo')
+      this.haxfred.components.push(component)
+
+      this.haxfred.registerModules()
+
+      expect(component).to.be.calledWith(this.haxfred)
+    })
+
+    it('does not register component if haxfred does not have required config', function () {
+      let component = sinon.spy()
+      component.requires = {
+        config: ['foo']
+      }
+
+      this.haxfred.components.push(component)
+
+      expect(() => {
+        this.haxfred.registerModules()
+      }).to.throw('A module requires the config "foo", but it was not found')
+    })
+
+    it('registers component if haxfred does have required config', function () {
+      let component = sinon.spy()
+      component.requires = {
+        config: ['foo']
+      }
+
+      this.haxfred.config.foo = 'foo'
+      this.haxfred.components.push(component)
+
+      this.haxfred.registerModules()
+
+      expect(component).to.be.calledWith(this.haxfred)
+    })
+
+    it('does not register component if haxfred does not have required nested config', function () {
+      let component = sinon.spy()
+      component.requires = {
+        config: ['foo.bar.baz']
+      }
+
+      this.haxfred.components.push(component)
+
+      expect(() => {
+        this.haxfred.registerModules()
+      }).to.throw('A module requires the config "foo.bar.baz", but it was not found')
+    })
+
+    it('registers component if haxfred does have required nested config', function () {
+      let component = sinon.spy()
+      component.requires = {
+        config: ['foo.bar.baz']
+      }
+
+      this.haxfred.config.foo = { bar: { baz: 'foobarbaz' } }
+      this.haxfred.components.push(component)
+
+      this.haxfred.registerModules()
+
+      expect(component).to.be.calledWith(this.haxfred)
     })
   })
 
