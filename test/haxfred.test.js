@@ -146,8 +146,10 @@ describe('Haxfred', function () {
     it('does not register modules that are not functions', function () {
       let haxfred = new Haxfred()
 
-      expect(function () {
-        haxfred._registerModule({ 'name': 'stringExport' })
+      haxfred.components.push({ 'name': 'stringExport' })
+
+      expect(() => {
+        haxfred.registerModules()
       }).to.throw(Error)
     })
   })
