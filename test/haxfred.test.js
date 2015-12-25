@@ -1,17 +1,12 @@
-/* jshint and chai's expect interface do not place nicely
- * so we ignore jshint in our tests :\
- */
-/* jshint -W024, expr:true */
-
 // TODO: put these in a common file to reduce boilerplate
 // ala https://github.com/domenic/sinon-chai/blob/master/test/common.js
 
-var sinon = require('sinon')
-var sinonChai = require('sinon-chai')
-var expect = require('chai').expect
-var Haxfred = require('../lib/haxfred')
-var path = require('path')
-var chai = require('chai')
+import sinon from 'sinon'
+import sinonChai from 'sinon-chai'
+import { expect } from 'chai'
+import Haxfred from '../src/haxfred'
+import path from 'path'
+import chai from 'chai'
 
 chai.use(expect)
 chai.use(sinonChai)
@@ -19,20 +14,20 @@ chai.use(sinonChai)
 describe('Haxfred', function () {
   describe('creation', function () {
     it('creates an event property ', function () {
-      var haxfred = new Haxfred()
+      let haxfred = new Haxfred()
 
       expect(haxfred).to.have.property('_events')
     })
 
     it('creates adapters and components properties', function () {
-      var haxfred = new Haxfred()
+      let haxfred = new Haxfred()
 
       expect(haxfred.config.adapters).to.be.an('array')
       expect(haxfred.config.components).to.be.an('array')
     })
 
     it('add configuration options to instance', function () {
-      var haxfred = new Haxfred({
+      let haxfred = new Haxfred({
         adapters: [
           'first',
           'second'
@@ -45,7 +40,7 @@ describe('Haxfred', function () {
   })
   describe('initialization', function () {
     it('adds Components', function () {
-      var stub = sinon.stub(Haxfred.prototype, '_addModule')
+      let stub = sinon.stub(Haxfred.prototype, '_addModule')
 
       new Haxfred({
         components: [
@@ -59,7 +54,7 @@ describe('Haxfred', function () {
     })
 
     it('adds adapters', function () {
-      var stub = sinon.stub(Haxfred.prototype, '_addModule')
+      let stub = sinon.stub(Haxfred.prototype, '_addModule')
 
       new Haxfred({
         adapters: [
@@ -74,7 +69,7 @@ describe('Haxfred', function () {
     })
 
     it('requires a path relative to haxfred file', function () {
-      var haxfred = new Haxfred({
+      let haxfred = new Haxfred({
         adapters: [
           '../test/fixtures/noop-adapter'
         ],
@@ -87,7 +82,7 @@ describe('Haxfred', function () {
     })
 
     it('can be configured to lookup modules at a different path', function () {
-      var haxfred = new Haxfred({
+      let haxfred = new Haxfred({
         adapters: [
           'noop-adapter'
         ],
@@ -100,7 +95,7 @@ describe('Haxfred', function () {
     })
 
     it('requires modules from root and node_modules', function () {
-      var haxfred = new Haxfred({
+      let haxfred = new Haxfred({
         adapters: [
           'path',
           'noop-adapter'
@@ -114,7 +109,7 @@ describe('Haxfred', function () {
     })
 
     it('prefers modules in node_modules over local files', function () {
-      var haxfred = new Haxfred({
+      let haxfred = new Haxfred({
         adapters: [
           'path'
         ],
@@ -127,7 +122,7 @@ describe('Haxfred', function () {
     })
 
     it('throws an error if module cannot be found', function () {
-      var haxfred = new Haxfred({ adapters: [
+      let haxfred = new Haxfred({ adapters: [
         './foo/bar/baz'
       ]
       })
@@ -139,8 +134,8 @@ describe('Haxfred', function () {
 
   describe('components and modules', function () {
     it('passes an instance of itself to components', function () {
-      var spyModule = sinon.spy()
-      var haxfred = new Haxfred()
+      let spyModule = sinon.spy()
+      let haxfred = new Haxfred()
 
       haxfred.components.push(spyModule)
       haxfred.registerModules()
@@ -149,7 +144,7 @@ describe('Haxfred', function () {
     })
 
     it('does not register modules that are not functions', function () {
-      var haxfred = new Haxfred()
+      let haxfred = new Haxfred()
 
       expect(function () {
         haxfred._registerModule({ 'name': 'stringExport' })
@@ -158,7 +153,7 @@ describe('Haxfred', function () {
   })
 
   describe('on', function () {
-    var haxfred
+    let haxfred
 
     beforeEach(function () {
       haxfred = new Haxfred()
@@ -185,7 +180,7 @@ describe('Haxfred', function () {
   })
 
   describe('emit', function () {
-    var haxfred
+    let haxfred
 
     beforeEach(function () {
       haxfred = new Haxfred()
@@ -200,7 +195,7 @@ describe('Haxfred', function () {
         filter: null
       }
 
-      var data = {
+      let data = {
         thing: 'baz'
       }
 
@@ -213,11 +208,11 @@ describe('Haxfred', function () {
     })
 
     it('accepts a string, a data object', function (done) {
-      var deferringFunction = sinon.spy(function (data, deferred) {
+      let deferringFunction = sinon.spy(function (data, deferred) {
         deferred.resolve()
       })
 
-      var data = {
+      let data = {
         baz: 'shit',
         onComplete: function () {
           expect(deferringFunction.args[0][0]).to.equal(data)
@@ -236,10 +231,10 @@ describe('Haxfred', function () {
     })
 
     it('calls all listeners for that event', function (done) {
-      var deferringFunction = sinon.spy(function (data, deferred) {
+      let deferringFunction = sinon.spy(function (data, deferred) {
         deferred.resolve()
       })
-      var deferringFunction2 = sinon.spy(function (data, deferred) {
+      let deferringFunction2 = sinon.spy(function (data, deferred) {
         deferred.resolve()
       })
 
@@ -264,7 +259,7 @@ describe('Haxfred', function () {
 
     it('calls are filtered with a String', function (done) {
       // Create spy that auto resolves defers
-      var deferringFunction = sinon.spy(function (data, deferred) {
+      let deferringFunction = sinon.spy(function (data, deferred) {
         deferred.resolve()
       })
 
@@ -292,7 +287,7 @@ describe('Haxfred', function () {
 
     it('calls are filtered with a Regex', function (done) {
       // Create spy that auto resolves defers
-      var deferringFunction = sinon.spy(function (data, deferred) {
+      let deferringFunction = sinon.spy(function (data, deferred) {
         deferred.resolve()
       })
 
@@ -322,12 +317,12 @@ describe('Haxfred', function () {
 
     it('calls are filtered with a Function', function (done) {
       // Create spy that auto resolves defers
-      var deferringFunction = sinon.spy(function (data, deferred) {
+      let deferringFunction = sinon.spy(function (data, deferred) {
         deferred.resolve()
       })
 
       // Spy for checking that the filter function receives its arguments
-      var filterSpy = sinon.spy(function (data) {
+      let filterSpy = sinon.spy(function (data) {
         return false
       })
       haxfred._events['foo'] = []
@@ -354,7 +349,7 @@ describe('Haxfred', function () {
         }
       }
 
-      var data = {
+      let data = {
         content: 'bunnies',
         bar: 'baz',
         onComplete: function () {
